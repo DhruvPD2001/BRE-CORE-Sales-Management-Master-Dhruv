@@ -102,6 +102,14 @@ page 51501 "Lead Card"
             }
         }
     }
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    var
+    begin
+        Rec.TestField("Lead Name");
+        Rec.TestField(Email);
+        Rec.TestField("Mobile No.");
+    end;
+
     trigger OnAfterGetRecord()
     begin
         IsQualified := (Rec."Lead Status" = Rec."Lead Status"::Qualified);
