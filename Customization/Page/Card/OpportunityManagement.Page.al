@@ -2,6 +2,7 @@ page 51251 "Opportunity Management"
 {
     PageType = Card;
     SourceTable = "Opportunity Management";
+    UsageCategory = None;
     Caption = 'Opportunity Management';
     ApplicationArea = All;
 
