@@ -1,0 +1,21 @@
+codeunit 53502 DialogboxConstProjectRejection
+{
+    procedure DialogboxForRejection(var Rec: Record "Construction Project")
+    var
+        ConstructionProjectRec: Record "Construction Project";
+        Rejectionmail: Codeunit ConstructionProjectRejection;
+        dialogpage: Page DialogBoxForRejection;
+        ReasonForRejection: Text;
+
+    begin
+        if ConstructionProjectRec.Get(Rec."Project ID") then
+            if dialogpage.RunModal() = Action::OK then begin
+                ReasonForRejection := dialogpage.GetReason();
+                Rec."Reason for Rejection" := CopyStr(ReasonForRejection, 1, StrLen(ReasonForRejection));
+                Rec.Modify();
+                Rejectionmail.ConstructionProjectRejection(Rec);
+            end else
+                Message('Please Enter Reason');
+    end;
+
+}
