@@ -3,7 +3,6 @@ page 51251 "Opportunity Management"
     PageType = Card;
     SourceTable = "Opportunity Management";
     Caption = 'Opportunity Management';
-    UsageCategory = Administration;
     ApplicationArea = All;
 
     layout
@@ -68,7 +67,7 @@ page 51251 "Opportunity Management"
                     ApplicationArea = All;
                     ToolTip = 'Specifies any additional notes or comments related to the opportunity.';
                 }
-                field("Created By"; Rec."Created By")
+                field("Created By"; Rec."Created Date")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the user who created the opportunity.';
