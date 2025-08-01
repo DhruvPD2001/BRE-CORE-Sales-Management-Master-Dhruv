@@ -2,10 +2,11 @@ page 51502 "Lead List"
 {
     PageType = List;
     ApplicationArea = All;
-    UsageCategory = Lists;
     SourceTable = "Lead Management";
     CardPageId = "Lead Card";
-
+    UsageCategory = Lists;
+    ModifyAllowed = false;
+    InsertAllowed = false;
     layout
     {
         area(Content)
@@ -19,7 +20,6 @@ page 51502 "Lead List"
                 field("Lead Name"; Rec."Lead Name")
                 {
                     ToolTip = 'Name of the lead.';
-
                 }
                 field("Lead Source"; Rec."Lead Source")
                 {
@@ -48,7 +48,6 @@ page 51502 "Lead List"
             }
         }
     }
-
     actions
     {
         area(Processing)
@@ -64,11 +63,8 @@ page 51502 "Lead List"
                     Lead: Record "Lead Management";
                 begin
                     Page.RunModal(Page::"Lead Card", Lead);
-
                 end;
             }
         }
     }
-
-
 }

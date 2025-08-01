@@ -5,7 +5,6 @@ page 51501 "Lead Card"
     UsageCategory = None;
     SourceTable = "Lead Management";
     Caption = 'Lead Card';
-
     layout
     {
         area(Content)
@@ -48,18 +47,36 @@ page 51501 "Lead Card"
                 {
                     ToolTip = 'Email address of the lead.';
                     trigger OnValidate()
+                    var
+                        LeadRec: Record "Lead Management";
                     begin
                         if Rec.Email <> '' then
                             if not Rec.Email.Contains('@') then
-                                Error('Invalid email address format.')
-                            else
-                                Error('Email cannot be empty.');
-
+                                Error('Invalid email address format.');
+                        if Rec.Email <> '' then begin
+                            LeadRec.Reset();
+                            LeadRec.SetRange(Email, Rec.Email);
+                            if LeadRec.FindFirst() then
+                                if LeadRec."Lead ID" <> Rec."Lead ID" then
+                                    Error('Duplicate email found: %1 already assigned to Lead: %2.', Rec.Email, LeadRec."Lead Name");
+                        end;
                     end;
                 }
                 field("Mobile No."; Rec."Mobile No.")
                 {
                     ToolTip = 'Mobile number of the lead.';
+                    trigger OnValidate()
+                    var
+                        LeadRec: Record "Lead Management";
+                    begin
+                        if Rec."Mobile No." <> '' then begin
+                            LeadRec.Reset();
+                            LeadRec.SetRange("Mobile No.", Rec."Mobile No.");
+                            if LeadRec.FindFirst() then
+                                if LeadRec."Lead ID" <> Rec."Lead ID" then
+                                    Error('Duplicate phone number found: %1 already assigned to Lead: %2.', Rec."Mobile No.", LeadRec."Lead Name");
+                        end;
+                    end;
                 }
                 field("Assigned Sales Person"; Rec."Assigned Sales Person")
                 {
@@ -98,7 +115,6 @@ page 51501 "Lead Card"
                     Editable = false;
                     ToolTip = 'Date when the lead was created.';
                 }
-
             }
         }
     }
