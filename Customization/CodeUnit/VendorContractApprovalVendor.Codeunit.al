@@ -1,0 +1,64 @@
+codeunit 53505 VendorContractApprovalVendor
+{
+    procedure VendorContractApproval(Rec: Record "Vendor Contract")
+    var
+        CompanyInfo: Record "Company Information";
+        VendorContract: Record "Vendor Contract";
+        TempBlob: Codeunit "Temp Blob";
+        Email: Codeunit "Email";
+        EmailMessage: Codeunit "Email Message";
+        RecRef: RecordRef;
+        outStream: OutStream;
+        inStream: InStream;
+        fileName: Text[250];
+    begin
+        VendorContract.SetRange("Contract ID", Rec."Contract ID");
+        if VendorContract.FindSet() then begin
+
+            RecRef.GetTable(VendorContract);
+
+            TempBlob.CreateOutStream(outStream);
+
+            Report.SaveAs(53751, '', ReportFormat::Pdf, outStream, RecRef);
+
+            TempBlob.CreateInStream(inStream);
+
+            fileName := 'Vendor Contract ' + VendorContract."Contract ID" + '.pdf';
+
+            if CompanyInfo.get() then begin
+                EmailMessage.Create(VendorContract."Vendor Email", 'Vendor Contract Approval Request - ' + VendorContract."Contract ID" + ' for Project ' + VendorContract."Project ID",
+                '<html>' +
+                             '<body>' +
+                             '<p>Dear ' + VendorContract."Vendor Name" + ',</p>' +
+                             '<h3>Vendor Contract Details</h3>' +
+                              '<p>We hope this message finds you well.' + '<br/>' +
+                               'The contract ' + VendorContract."Contract ID" + ' related to project ' + VendorContract."Project ID" + ' is now ready for your review and approval.' + '<br/>' +
+                               'Please find the Contract details below:' + '<br/>' +
+                              '<b>Contract ID:</b> ' + VendorContract."Contract ID" + '<br/>' +
+                              '<b>Vendor ID:</b> ' + VendorContract."Vendor ID" + '<br/>' +
+                                '<b>Project ID:</b> ' + Format(VendorContract."Project ID") + '<br/>' +
+                                '<b>Project Name:</b> ' + VendorContract."Project Name" + '<br/>' +
+                                '<b>Project Location:</b> ' + VendorContract."Project Location" + '<br/>' +
+                                '<b>Contract Start Date:</b> ' + Format(VendorContract."Contract Start Date") + '<br/>' +
+                                '<b>Contract End Date:</b> ' + Format(VendorContract."Contract End Date") + '<br/>' +
+                                '<b>Total Contract Value </b> ' + Format(VendorContract."Total Contract Value (AED)") + '</p>' +
+                              '<p>Please log into the Vendor Portal to review the contract details and approve or refer it back with comments.' + '<br/>' +
+                             'If you have any questions or need assistance accessing the portal, please feel free to contact us.' + '<br/>' +
+                             'Thank you for your cooperation.</p>' +
+                             '<p>Best regards,<br/>' + CompanyInfo.Name + '</p>' +
+                            '</body>' +
+                            '</html>',
+                            true);
+
+                EmailMessage.AddAttachment(fileName, '', inStream);
+
+                if Email.Send(EmailMessage) then
+                    Message('Email sent successfully to the Vendor: %1.', VendorContract."Vendor Name")
+                else
+                    Error('Failed to send email.');
+
+            end;
+        end;
+    end;
+
+}
