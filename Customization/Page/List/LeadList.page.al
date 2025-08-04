@@ -48,23 +48,4 @@ page 51502 "Lead List"
             }
         }
     }
-    actions
-    {
-        area(Processing)
-        {
-            action("New Lead")
-            {
-                ToolTip = 'Create a new lead.';
-                ApplicationArea = All;
-                Caption = 'New Lead';
-                Image = New;
-                trigger OnAction()
-                var
-                    Lead: Record "Lead Management";
-                begin
-                    Page.RunModal(Page::"Lead Card", Lead);
-                end;
-            }
-        }
-    }
 }

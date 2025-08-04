@@ -33,11 +33,22 @@ page 51501 "Lead Card"
                 field("Lead Status"; Rec."Lead Status")
                 {
                     ToolTip = 'Current status of the lead.';
+                    Editable = FieldEditable;
 
                     trigger OnValidate()
                     begin
                         ValidateLeadStatus();
                     end;
+                }
+                field("Disqualification Reason"; Rec."Disqualification Reason")
+                {
+                    ToolTip = 'Reason why the lead was disqualified.';
+                    Editable = FieldEditable;
+                }
+                field("Disqualification Date"; Rec."Disqualification Date")
+                {
+                    ToolTip = 'Date when the lead was disqualified.';
+                    Editable = false;
                 }
             }
             group("Contact Details")
@@ -116,6 +127,32 @@ page 51501 "Lead Card"
                     ToolTip = 'Date when the lead was created.';
                 }
             }
+            part("lead interaction log"; "Lead Interaction Log Subpage")
+            {
+                SubPageLink = "Lead ID" = field("Lead ID");
+            }
+        }
+    }
+    actions
+    {
+        area(Processing)
+        {
+            action(DisqualifyLead)
+            {
+                ApplicationArea = All;
+                Image = CloseDocument;
+                Caption = 'Disqualify Lead';
+                ToolTip = 'Mark this lead as disqualified and record the reason.';
+
+                trigger OnAction()
+                var
+                    DialogboxConstProjectRejectionCodeunit: Codeunit DialogboxConstProjectRejection;
+                begin
+                    DialogboxConstProjectRejectionCodeunit.DialogboxForDisqualifiedLead(Rec);
+                    FieldEditable := false;
+                    CurrPage.Update();
+                end;
+            }
         }
     }
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
@@ -133,6 +170,7 @@ page 51501 "Lead Card"
 
     var
         IsQualified: Boolean;
+        FieldEditable: Boolean;
 
     procedure ValidateLeadStatus()
     var
