@@ -34,7 +34,6 @@ page 51501 "Lead Card"
                 {
                     ToolTip = 'Current status of the lead.';
                     Editable = FieldEditable;
-
                     trigger OnValidate()
                     begin
                         ValidateLeadStatus();
@@ -141,16 +140,14 @@ page 51501 "Lead Card"
             {
                 ApplicationArea = All;
                 Image = CloseDocument;
+                Enabled = EditableAction;
                 Caption = 'Disqualify Lead';
                 ToolTip = 'Mark this lead as disqualified and record the reason.';
-
                 trigger OnAction()
                 var
                     DialogboxConstProjectRejectionCodeunit: Codeunit DialogboxConstProjectRejection;
                 begin
                     DialogboxConstProjectRejectionCodeunit.DialogboxForDisqualifiedLead(Rec);
-                    FieldEditable := false;
-                    CurrPage.Update();
                 end;
             }
         }
@@ -166,11 +163,22 @@ page 51501 "Lead Card"
     trigger OnAfterGetRecord()
     begin
         IsQualified := (Rec."Lead Status" = Rec."Lead Status"::Qualified);
+        if Rec."Lead Status" = Rec."Lead Status"::Disqualified then
+            EditableAction := false;
+        if Rec."Disqualification Reason" <> '' then
+            FieldEditable := false;
+    end;
+
+    trigger OnOpenPage()
+    begin
+        EditableAction := true;
+        FieldEditable := true;
     end;
 
     var
         IsQualified: Boolean;
         FieldEditable: Boolean;
+        EditableAction: Boolean;
 
     procedure ValidateLeadStatus()
     var
@@ -180,24 +188,19 @@ page 51501 "Lead Card"
             "Lead Status"::New:
                 if Rec."Lead Status" = "Lead Status"::Qualified then
                     Error('Lead must be Contacted before it can be marked as Qualified.');
-
             "Lead Status"::Contacted:
                 if Rec."Lead Status" = "Lead Status"::New then
                     Error('Cannot move back to New from Contacted.');
-
             "Lead Status"::Qualified:
                 if Rec."Lead Status" <> "Lead Status"::Qualified then
                     Error('Cannot change status after Qualified.');
-
             "Lead Status"::Disqualified:
                 if Rec."Lead Status" <> "Lead Status"::Disqualified then
                     Error('Cannot change status after Disqualified.');
         end;
-
         if Rec."Lead Status" = "Lead Status"::Qualified then
             if Rec."Assigned Sales Person" = '' then
                 Error('Assigned Sales Person must be populated before marking as Qualified.');
-
         if Rec."Lead Status" = "Lead Status"::Disqualified then
             if not ConfirmMgt.GetResponseOrDefault('Are you sure you want to Disqualify this lead?', false) then
                 Rec."Lead Status" := xRec."Lead Status";

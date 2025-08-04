@@ -33,8 +33,7 @@ codeunit 53502 DialogboxConstProjectRejection
                 Rec."Disqualification Reason" := CopyStr(ReasonForDisqualifyLead, 1, StrLen(ReasonForDisqualifyLead));
                 Rec."Disqualification Date" := Today();
                 Rec.Modify();
-            end else
-                Message('Please Enter Reason');
+            end;
     end;
 
 }
