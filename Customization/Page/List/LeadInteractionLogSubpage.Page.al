@@ -60,17 +60,17 @@ page 53111 "Lead Interaction Log Subpage"
     trigger OnNewRecord(BelowxRec: Boolean)
     begin
         Rec."Interaction Date" := Today;
-        Rec."Sales Rep ID" := UserId;
+        Rec."Sales Rep ID" := CopyStr(UserId, 1, StrLen(UserId));
 
         if xRec."Lead ID" <> '' then
             Rec."Lead ID" := xRec."Lead ID";
     end;
 
-    trigger OnQueryClosePage(CloseAction: Action): Boolean
-    begin
-        if Rec."Interaction Method" = Rec."Interaction Method"::" " then
-            Error('Please select an Interaction Method before saving.');
-    end;
+    // trigger OnQueryClosePage(CloseAction: Action): Boolean
+    // begin
+    //     if Rec."Interaction Method" = Rec."Interaction Method"::" " then
+    //         Error('Please select an Interaction Method before saving.');
+    // end;
 
     trigger OnAfterGetRecord()
     begin
