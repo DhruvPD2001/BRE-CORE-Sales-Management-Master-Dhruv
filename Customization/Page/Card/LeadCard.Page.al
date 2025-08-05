@@ -107,6 +107,8 @@ page 51501 "Lead Card"
                 field("Follow-up Date"; Rec."Follow-up Date")
                 {
                     ToolTip = 'Date for the next follow-up with the lead.';
+                    ApplicationArea = All;
+                    Editable = IsFollowUpEditable;
                 }
                 field(Notes; Rec.Notes)
                 {
@@ -160,6 +162,9 @@ page 51501 "Lead Card"
         Rec.TestField("Mobile No.");
     end;
 
+    var
+        IsFollowUpEditable: Boolean;
+
     trigger OnAfterGetRecord()
     begin
         IsQualified := (Rec."Lead Status" = Rec."Lead Status"::Qualified);
@@ -167,12 +172,26 @@ page 51501 "Lead Card"
             EditableAction := false;
         if Rec."Disqualification Reason" <> '' then
             FieldEditable := false;
+
+        // IsFollowUpEditable :=
+        //     (Rec."Lead Status" = Rec."Lead Status"::New) or
+        //     (Rec."Lead Status" = Rec."Lead Status"::Contacted) or
+        //     (Rec."Lead Status" = Rec."Lead Status"::Qualified);
+        if Rec."Lead Status" = Rec."Lead Status"::New then
+            IsFollowUpEditable := true;
+        if Rec."Lead Status" = Rec."Lead Status"::Contacted then
+            IsFollowUpEditable := true;
+        if Rec."Lead Status" = Rec."Lead Status"::Qualified then
+            IsFollowUpEditable := true;
+        if Rec."Lead Status" = Rec."Lead Status"::Disqualified then
+            IsFollowUpEditable := false;
     end;
 
     trigger OnOpenPage()
     begin
         EditableAction := true;
         FieldEditable := true;
+        IsFollowUpEditable := true;
     end;
 
     var

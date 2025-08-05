@@ -40,6 +40,8 @@ page 51502 "Lead List"
                 field("Follow-up Date"; Rec."Follow-up Date")
                 {
                     ToolTip = 'Date for the next follow-up with the lead.';
+                    ApplicationArea = All;
+                    StyleExpr = FollowUpStyle;
                 }
                 field("Created Date"; Rec."Created Date")
                 {
@@ -48,4 +50,21 @@ page 51502 "Lead List"
             }
         }
     }
+
+    var
+        FollowUpStyle: Text;
+
+    trigger OnAfterGetRecord()
+    begin
+        FollowUpStyle := '';
+
+        if Rec."Follow-up Date" <> 0D then begin
+            if Rec."Follow-up Date" < Today() then
+                FollowUpStyle := 'Attention';
+            if (Rec."Follow-up Date" = Today()) then
+                FollowUpStyle := 'Favorable';
+            if Rec."Follow-up Date" > Today() then
+                FollowUpStyle := 'Favorable';
+        end;
+    end;
 }
