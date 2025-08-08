@@ -28,6 +28,7 @@ page 51502 "Lead List"
                 field("Lead Status"; Rec."Lead Status")
                 {
                     ToolTip = 'Current status of the lead.';
+                    StyleExpr = LeadStatusStyle;
                 }
                 field("Assigned Sales Person"; Rec."Assigned Sales Person")
                 {
@@ -53,11 +54,12 @@ page 51502 "Lead List"
 
     var
         FollowUpStyle: Text;
+        LeadStatusStyle: Text;
 
     trigger OnAfterGetRecord()
     begin
+        // Follow-up Date Styling (existing)
         FollowUpStyle := '';
-
         if Rec."Follow-up Date" <> 0D then begin
             if Rec."Follow-up Date" < Today() then
                 FollowUpStyle := 'Attention';
@@ -65,6 +67,20 @@ page 51502 "Lead List"
                 FollowUpStyle := 'Favorable';
             if Rec."Follow-up Date" > Today() then
                 FollowUpStyle := 'Favorable';
+        end;
+
+        // Lead Status Styling
+        case Rec."Lead Status" of
+            Rec."Lead Status"::"New":
+                LeadStatusStyle := 'Ambiguous';       // Yellow
+            Rec."Lead Status"::"Contacted":
+                LeadStatusStyle := 'Favorable';       // Green
+            Rec."Lead Status"::"Qualified":
+                LeadStatusStyle := 'StrongAccent';          // Bold Blue
+            Rec."Lead Status"::"Disqualified":
+                LeadStatusStyle := 'Unfavorable';     // Red
+            else
+                LeadStatusStyle := '';
         end;
     end;
 }
