@@ -138,6 +138,36 @@ page 51501 "Lead Card"
     {
         area(Processing)
         {
+            action("Convert To Opportunity")
+            {
+                ApplicationArea = All;
+                Caption = 'Convert to Opportunity';
+                Image = Opportunity;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                Enabled = Rec."Lead Status" = Rec."Lead Status"::Qualified;
+                ToolTip = 'Convert this qualified lead into an opportunity.';
+
+                trigger OnAction()
+                var
+                    OpportunityRecord: Record "Opportunity Management";
+                    LeadConversionMgt: Codeunit "Lead to Opportunity Mgt";
+                    OpportunityCard: Page "Opportunity Management";
+                    OpportunityNo: Code[20];
+                begin
+                    OpportunityNo := LeadConversionMgt.ConvertLeadToOpportunity(Rec);
+
+                    // Try to find and open the created opportunity
+                    OpportunityRecord.SetRange("Opportunity ID", OpportunityNo);
+                    if OpportunityRecord.FindFirst() then begin
+                        OpportunityCard.SetRecord(OpportunityRecord);
+                        OpportunityCard.Run();
+                    end;
+
+                    Message('Lead successfully converted to Opportunity: %1', OpportunityNo);
+                end;
+            }
             action(DisqualifyLead)
             {
                 ApplicationArea = All;

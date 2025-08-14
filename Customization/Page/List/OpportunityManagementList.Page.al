@@ -1,4 +1,4 @@
-page 52001 "Opportunity Management List"
+page 51253 "Opportunity Management List"
 {
     PageType = List;
     ApplicationArea = All;
