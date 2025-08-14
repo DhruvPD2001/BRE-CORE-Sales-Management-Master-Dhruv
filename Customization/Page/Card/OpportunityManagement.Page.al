@@ -68,7 +68,7 @@ page 51251 "Opportunity Management"
                     ApplicationArea = All;
                     ToolTip = 'Specifies any additional notes or comments related to the opportunity.';
                 }
-                field("Created By"; Rec."Created Date")
+                field("Created By"; Rec."Created By")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the user who created the opportunity.';
@@ -78,6 +78,33 @@ page 51251 "Opportunity Management"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the date when the opportunity was created.';
                 }
+            }
+        }
+    }
+    actions
+    {
+        area(Navigation)
+        {
+            action(ViewRelatedLead)
+            {
+                ApplicationArea = All;
+                Caption = 'View Related Lead';
+                Image = ContactPerson;
+                ToolTip = 'View the lead that was converted to this opportunity.';
+
+                trigger OnAction()
+                var
+                    LeadRecord: Record "Lead Management";
+                    LeadCard: Page "Lead Card";
+                begin
+                    if Rec."Lead ID" <> '' then begin
+                        if LeadRecord.Get(Rec."Lead ID") then begin
+                            LeadCard.SetRecord(LeadRecord);
+                            LeadCard.Run();
+                        end;
+                    end else
+                        Message('No related lead found for this opportunity.');
+                end;
             }
         }
     }
