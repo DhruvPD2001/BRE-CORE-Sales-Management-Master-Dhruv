@@ -26,6 +26,10 @@ page 51501 "Lead Card"
                             Error('Lead Name cannot be empty.');
                     end;
                 }
+                field("Lead Owner"; Rec."Lead Owner")
+                {
+                    ToolTip = 'Owner of the lead.';
+                }
                 field("Lead Source"; Rec."Lead Source")
                 {
                     ToolTip = 'Source from which the lead was generated.';
@@ -39,6 +43,10 @@ page 51501 "Lead Card"
                         ValidateLeadStatus();
                     end;
                 }
+                field("Lead Rating"; Rec."Lead Rating")
+                {
+                    ToolTip = 'Rating of the lead.';
+                }
                 field("Disqualification Reason"; Rec."Disqualification Reason")
                 {
                     ToolTip = 'Reason why the lead was disqualified.';
@@ -50,7 +58,7 @@ page 51501 "Lead Card"
                     Editable = false;
                 }
             }
-            group("Contact Details")
+            group("Contact & Company Details")
             {
                 Editable = not IsQualified;
                 field(Email; Rec.Email)
@@ -88,6 +96,11 @@ page 51501 "Lead Card"
                         end;
                     end;
                 }
+
+                field("Company Name"; Rec."Company Name")
+                {
+                    ToolTip = 'Company Name to the lead.';
+                }
                 field("Assigned Sales Person"; Rec."Assigned Sales Person")
                 {
                     ToolTip = 'Salesperson assigned to the lead.';
@@ -97,9 +110,83 @@ page 51501 "Lead Card"
                 {
                     ToolTip = 'Area of interest for the lead.';
                 }
+                field(Nationality; Rec.Nationality)
+                {
+                    ToolTip = 'Nationality of the lead';
+                }
+                field("Preferred Language"; Rec."Preferred Language")
+                {
+                    ToolTip = 'Preferred Language of the Lead.';
+                    TableRelation = Language.Name;
+                }
+            }
+
+            group("Property Requirements")
+            {
+                field("Property Type"; Rec."Property Type")
+                {
+                    ToolTip = 'Specifies the type of property the lead is interested in, such as apartment, villa, or commercial space.';
+                    TableRelation = "Property Type"."Property Type";
+                }
+                field("Preferred Location"; Rec."Preferred Location")
+                {
+                    ToolTip = 'Specifies the location or area preferred by the lead for the property.';
+                }
                 field("Expected Budget"; Rec."Expected Budget")
                 {
-                    ToolTip = 'Expected budget for the lead.';
+                    ToolTip = 'Specifies the budget range the lead is willing to spend on the property.';
+                }
+                field("Size"; Rec."Size")
+                {
+                    ToolTip = 'Specifies the size requirement of the property, such as square feet or square meters.';
+                    TableRelation = "Unit of Measure".Code;
+                }
+                field("Bedrooms & Bathrooms"; Rec."Bedrooms & Bathrooms")
+                {
+                    ToolTip = 'Specifies the number of bedrooms and bathrooms required by the lead.';
+                }
+                field("Furnishing Status"; Rec."Furnishing Status")
+                {
+                    ToolTip = 'Specifies whether the lead prefers a furnished, semi-furnished, or unfurnished property.';
+                }
+                field("Preferred Payment Plan"; Rec."Preferred Payment Plan")
+                {
+                    ToolTip = 'Specifies the payment plan preferred by the lead, such as installment or one-time payment.';
+                }
+                field("Move-in Timeline"; Rec."Move-in Timeline")
+                {
+                    ToolTip = 'Specifies the expected timeline by which the lead wants to move into the property.';
+                }
+            }
+            group("Financial & Legal Details (For Compliance)")
+            {
+                field("Emirates ID/Passport Number"; Rec."Emirates ID/Passport Number")
+                {
+                    ToolTip = 'Specifies the Emirates ID or Passport Number of the lead for identification purposes.';
+                }
+                field("Visa Status"; Rec."Visa Status")
+                {
+                    ToolTip = 'Specifies the visa status of the lead, such as resident, visitor, or work visa.';
+                }
+                field("Source of Funds"; Rec."Source of Funds")
+                {
+                    ToolTip = 'Specifies the declared source of funds that the lead will use for the property purchase.';
+                }
+                field("Mortgage Pre-Approval Status"; Rec."Mortgage Pre-Approval Status")
+                {
+                    ToolTip = 'Specifies whether the lead has obtained mortgage pre-approval from a bank or lender.';
+                }
+                field("TAX Registration_VAT"; Rec."TAX Registration_VAT")
+                {
+                    ToolTip = 'Specifies the VAT or Tax Registration Number of the lead, if applicable.';
+                }
+                field("RERA Broker ID"; Rec."RERA Broker ID")
+                {
+                    ToolTip = 'Specifies the RERA Broker ID associated with the lead or transaction.';
+                }
+                field("Preferred Sale Type"; Rec."Preferred Sale Type")
+                {
+                    ToolTip = 'Specifies the preferred type of sale for the lead, such as off-plan, secondary market, or resale.';
                 }
             }
             group("Follow-Up")
