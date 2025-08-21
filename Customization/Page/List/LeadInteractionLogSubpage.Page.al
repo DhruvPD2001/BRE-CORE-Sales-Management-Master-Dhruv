@@ -38,7 +38,14 @@ page 53111 "Lead Interaction Log Subpage"
                 field("Next Follow-Up Date"; Rec."Next Follow-Up Date")
                 {
                     ToolTip = 'Date for the next follow-up with the lead.';
-                    Editable = true;
+                }
+                field("Sales Stage"; Rec."Sales Stage")
+                {
+                    ToolTip = 'Sales Stage for the lead.';
+                }
+                field("Competitor Information"; Rec."Competitor Information")
+                {
+                    ToolTip = 'Competitor Information for the lead.';
                 }
             }
         }
