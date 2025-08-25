@@ -34,6 +34,16 @@ page 51501 "Lead Card"
                 {
                     ToolTip = 'Source from which the lead was generated.';
                 }
+                field("Other"; Rec."Other")
+                {
+                    ToolTip = 'Specifies any other lead source not listed in the predefined options.';
+                    Editable = (Rec."Lead Source" = Rec."Lead Source"::Other);
+                }
+                field("Campaign Name"; Rec."Campaign Name")
+                {
+                    ToolTip = 'Specifies the name of the marketing campaign or promotion from which the lead was generated.';
+                    Editable = (Rec."Lead Source" = Rec."Lead Source"::"Campaign/Events");
+                }
                 field("Lead Status"; Rec."Lead Status")
                 {
                     ToolTip = 'Current status of the lead.';
@@ -61,6 +71,19 @@ page 51501 "Lead Card"
             group("Contact & Company Details")
             {
                 Editable = not IsQualified;
+                field("Assigned Sales Person"; Rec."Assigned Sales Person")
+                {
+                    ToolTip = 'Salesperson assigned to the lead.';
+                    TableRelation = "Salesperson/Purchaser";
+
+                    trigger OnValidate()
+                    var
+                        SalesRole: Record "Salesperson/Purchaser";
+                    begin
+                        if SalesRole.Get(Rec."Assigned Sales Person") then
+                            Rec."Position/Role" := SalesRole."Job Title";   // replace with actual role field name in Salesperson/Purchaser table
+                    end;
+                }
                 field(Email; Rec.Email)
                 {
                     ToolTip = 'Email address of the lead.';
@@ -101,10 +124,9 @@ page 51501 "Lead Card"
                 {
                     ToolTip = 'Company Name to the lead.';
                 }
-                field("Assigned Sales Person"; Rec."Assigned Sales Person")
+                field("Position/Role"; Rec."Position/Role")
                 {
-                    ToolTip = 'Salesperson assigned to the lead.';
-                    TableRelation = "Salesperson/Purchaser";
+                    ToolTip = 'Position/Role attend to the lead.';
                 }
                 field("Interst Area"; Rec."Interst Area")
                 {
