@@ -70,10 +70,20 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Property Type';
                 }
-                field("Usage Type"; Rec."Usage Type")
+                // field("Usage Type"; Rec."Usage Type")
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Usage Type';
+                // }
+                field("Bedrooms"; Rec."Bedrooms")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Usage Type';
+                    ToolTip = 'Bedrooms';
+                }
+                field("Bathrooms"; Rec."Bathrooms")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Bathrooms';
                 }
                 field("Preferred Location"; Rec."Preferred Location")
                 {
