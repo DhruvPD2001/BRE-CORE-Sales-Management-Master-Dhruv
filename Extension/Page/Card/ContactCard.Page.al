@@ -6,10 +6,25 @@ pageextension 53116 "Contact Card" extends "Contact Card"
         {
             group("Lead Information")
             {
+                field("Position/Role"; Rec."Position/Role")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Position/Role';
+                }
                 field("Lead Source"; Rec."Lead Source")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Lead Source';
+                }
+                field("Others"; Rec."Others")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Others';
+                }
+                field("Campaign Name"; Rec."Campaign Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Campaign Name';
                 }
                 field("Lead Owner"; Rec."Lead Owner")
                 {
@@ -38,15 +53,15 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 }
             }
 
-            group("Contact & Company Details")
-            {
+            // group("Contact & Company Details")
+            // {
 
-                field("Position/Role"; Rec."Position/Role")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Position/Role';
-                }
-            }
+            //     field("Position/Role"; Rec."Position/Role")
+            //     {
+            //         ApplicationArea = All;
+            //         ToolTip = 'Position/Role';
+            //     }
+            // }
 
             group("Property Requirements")
             {
@@ -74,6 +89,21 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Size (Sq. Ft.)';
+                }
+                field("Furnishing Status"; Rec."Furnishing Status")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Furnishing Status';
+                }
+                field("Preferred Payment Plan"; Rec."Preferred Payment Plan")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Preferred Payment Plan';
+                }
+                field("Move-in Timeline"; Rec."Move-in Timeline")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Move-in Timeline';
                 }
             }
 
@@ -110,6 +140,21 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ToolTip = 'Preferred Sale Type';
                 }
             }
+            group("Interaction & Follow-up History")
+            {
+
+                field("Lead Sales Stages"; Rec."Lead Sales Stages")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Lead Sales Stages';
+                }
+                field("Competitor Information"; Rec."Competitor Information")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Competitor Information';
+                }
+            }
+
         }
     }
 }
