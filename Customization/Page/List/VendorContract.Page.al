@@ -1,4 +1,4 @@
-page 53109 "VendorContract"
+page 53109 "VendorContractList"
 {
     PageType = List;
     SourceTable = "Vendor Contract";
