@@ -1,10 +1,10 @@
-page 51253 "Opportunity Management List"
+page 51261 "Opportunity Management List"
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = "Opportunity Management";
-    CardPageId = 51251;
+    CardPageId = 51264;
 
     layout
     {
