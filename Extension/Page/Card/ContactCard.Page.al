@@ -2,8 +2,43 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 {
     layout
     {
+        modify("E-Mail")
+        {
+            trigger OnAfterValidate()
+            var
+                LeadRec: Record Contact;
+            begin
+                if Rec."E-Mail" <> '' then
+                    if not Rec."E-Mail".Contains('@') then
+                        Error('Invalid email address format.');
+                if Rec."E-Mail" <> '' then begin
+                    LeadRec.Reset();
+                    LeadRec.SetRange("E-Mail", Rec."E-Mail");
+                    if LeadRec.FindFirst() then
+                        if LeadRec."No." <> Rec."No." then
+                            Error('Duplicate email found: %1 already assigned to Lead: %2.', Rec."E-Mail", LeadRec.Name);
+                end;
+            end;
+        }
+        modify("Phone No.")
+        {
+            trigger OnAfterValidate()
+            var
+                LeadRec: Record Contact;
+            begin
+                if Rec."Phone No." <> '' then begin
+                    LeadRec.Reset();
+                    LeadRec.SetRange("Phone No.", Rec."Phone No.");
+                    if LeadRec.FindFirst() then
+                        if LeadRec."No." <> Rec."No." then
+                            Error('Duplicate phone number found: %1 already assigned to Lead: %2.', Rec."Phone No.", LeadRec.Name);
+                end;
+            end;
+        }
         addafter(General)
         {
+
+
             group("Lead Information")
             {
                 field("Position/Role"; Rec."Position/Role")
@@ -114,7 +149,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Property Type';
                 }
-            
+
                 field("Bedrooms"; Rec."Bedrooms")
                 {
                     ApplicationArea = All;
@@ -207,7 +242,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 
         }
     }
-     trigger OnModifyRecord(): Boolean
+    trigger OnModifyRecord(): Boolean
     begin
         IsDisqualified := EditableDisqualifiedReason();
     end;
