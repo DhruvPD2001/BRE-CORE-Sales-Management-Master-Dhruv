@@ -1,4 +1,4 @@
-page 51252 "Project Budget Allocation"
+page 51265 "Project Budget Allocation"
 {
     PageType = Card;
     SourceTable = "Project Budget Allocation";

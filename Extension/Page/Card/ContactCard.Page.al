@@ -35,6 +35,28 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Lead Status';
+
+                    trigger OnValidate()
+                    var
+                        OldStatus: Enum "Lead Status";
+                    begin
+                        OldStatus := xRec."Lead Status";
+                        if (OldStatus = OldStatus::New) and (Rec."Lead Status" = Rec."Lead Status"::Qualified) then
+                            Error('Status cannot be changed directly from New to Qualified. Please change status from New to Contacted first.');
+                        if (OldStatus = OldStatus::New) and (Rec."Lead Status" = Rec."Lead Status"::Disqualified) then
+                            Error('Status cannot be changed directly from New to Disqualified. Please change status from New to Contacted first.');
+                        if (OldStatus = OldStatus::Disqualified) and (Rec."Lead Status" = Rec."Lead Status"::Contacted) and (not Rec."Allow Reopen") then
+                            Error('Reopening from Disqualified to Contacted is not allowed unless Allow Reopen is true.');
+                        if (OldStatus = OldStatus::Disqualified) and (Rec."Lead Status" = Rec."Lead Status"::New) then
+                            Error('Status cannot be changed directly from Disqualified to New. Please change status from New to Contacted first.');
+                        if Rec."Lead Status" = Rec."Lead Status"::Disqualified then
+                            Message('Please provide a Disqualification Reason.');
+                        if OldStatus <> Rec."Lead Status" then begin
+                            Rec."Previous Status" := OldStatus;
+                            Rec."Status Changed By" := UserId();
+                            Rec."Status Changed On" := CurrentDateTime;
+                        end;
+                    end;
                 }
                 field("Lead Rating"; Rec."Lead Rating")
                 {
@@ -51,17 +73,39 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Expected Follow-up Date';
                 }
+                field("Allow Reopen"; Rec."Allow Reopen")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Allow Reopen of Lead';
+                }
+                field("Disqualification Reason"; Rec."Disqualification Reason")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Reason for Disqualification';
+                    Editable = IsDisqualified;
+                }
+                field("Disqualification Date"; Rec."Disqualification Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Disqualification Date';
+                    Editable = false;
+                }
+                field("Previous Status"; Rec."Previous Status")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Previous Status';
+                }
+                field("Status Changed By"; Rec."Status Changed By")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Status Changed By';
+                }
+                field("Status Changed On"; Rec."Status Changed On")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Status Changed On';
+                }
             }
-
-            // group("Contact & Company Details")
-            // {
-
-            //     field("Position/Role"; Rec."Position/Role")
-            //     {
-            //         ApplicationArea = All;
-            //         ToolTip = 'Position/Role';
-            //     }
-            // }
 
             group("Property Requirements")
             {
@@ -70,11 +114,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Property Type';
                 }
-                // field("Usage Type"; Rec."Usage Type")
-                // {
-                //     ApplicationArea = All;
-                //     ToolTip = 'Usage Type';
-                // }
+            
                 field("Bedrooms"; Rec."Bedrooms")
                 {
                     ApplicationArea = All;
@@ -167,4 +207,22 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 
         }
     }
+     trigger OnModifyRecord(): Boolean
+    begin
+        IsDisqualified := EditableDisqualifiedReason();
+    end;
+
+    trigger OnAfterGetCurrRecord()
+    begin
+        IsDisqualified := EditableDisqualifiedReason();
+    end;
+
+    procedure EditableDisqualifiedReason(): Boolean
+    var
+    begin
+        exit(Rec."Lead Status" = Rec."Lead Status"::Disqualified);
+    end;
+
+    var
+        IsDisqualified: Boolean;
 }

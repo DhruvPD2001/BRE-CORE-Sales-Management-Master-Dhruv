@@ -1,10 +1,10 @@
-page 51254 "Project Budget Allocation List"
+page 51262 "Project Budget Allocation List"
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = "Project Budget Allocation";
-    CardPageId = 51252;
+    CardPageId = 51265;
     layout
     {
         area(Content)

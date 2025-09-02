@@ -1,4 +1,4 @@
-page 51251 "Opportunity Management"
+page 51264 "Opportunity Management"
 {
     PageType = Card;
     SourceTable = "Opportunity Management";
