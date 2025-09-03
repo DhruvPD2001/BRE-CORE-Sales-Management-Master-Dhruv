@@ -242,15 +242,54 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 
         }
     }
+    actions
+    {
+        addafter("C&ontact")
+        {
+            action(SendItemButtonsEmail)
+            {
+                ApplicationArea = All;
+                Caption = 'Send Items Email';
+                Image = Email;
+
+                trigger OnAction()
+                var
+                    Emailer: Codeunit "Customer Item Emailer";
+                    ItemsCsv: Text;
+                begin
+                    // TODO: replace with a proper picker; for demo:
+                    ItemsCsv := '1896-S,1000'; // sample list
+                    Emailer.SendItemsEmail(Rec."No.", ItemsCsv);
+                    Message('Email sent to %1.', Rec."E-Mail");
+                end;
+            }
+        }
+    }
     trigger OnModifyRecord(): Boolean
     begin
         IsDisqualified := EditableDisqualifiedReason();
     end;
 
-    trigger OnAfterGetCurrRecord()
+    trigger OnAfterGetRecord()
+    var
+        taskRec: Record "To-do";
+        contactRec: Record Contact;
     begin
         IsDisqualified := EditableDisqualifiedReason();
+
+        // Find the first To-do record for this contact with Date > Today
+        taskRec.SetRange("Contact No.", Rec."No.");
+        taskRec.SetFilter("Date", '>=%1', Today);
+        taskRec.SetCurrentKey(Date);
+        if taskRec.FindFirst() then begin
+            // Find the matching contact record
+            if contactRec.Get(taskRec."Contact No.") then begin
+                contactRec."Expected Follow-up Date" := taskRec.Date;
+                contactRec.Modify();
+            end;
+        end;
     end;
+
 
     procedure EditableDisqualifiedReason(): Boolean
     var
