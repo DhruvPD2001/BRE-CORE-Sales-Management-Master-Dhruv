@@ -35,12 +35,42 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 end;
             end;
         }
+        modify("Type")
+        {
+            Visible = false;
+        }
+
+        addlast(General)
+        {
+            field("Owner Email"; Rec."Owner Email")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the owner email for this contact.';
+            }
+            field("Owner Contact No."; Rec."Owner Contact No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the Owner Contact No. number for this contact.';
+            }
+            field("Owner Type"; Rec."Owner Type")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the Owner Type for this contact.';
+            }
+        }
+
         addafter(General)
         {
 
 
             group("Lead Information")
             {
+                field("Lead Owner"; Rec."Lead Owner")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Lead Name';
+                }
+
                 field("Position/Role"; Rec."Position/Role")
                 {
                     ApplicationArea = All;
@@ -61,11 +91,11 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Campaign Name';
                 }
-                field("Lead Owner"; Rec."Lead Owner")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Lead Owner';
-                }
+                // field("Lead Owner"; Rec."Lead Owner")
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Lead Owner';
+                // }
                 field("Lead Status"; Rec."Lead Status")
                 {
                     ApplicationArea = All;
@@ -144,10 +174,21 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 
             group("Property Requirements")
             {
+                field("Primary Classification"; Rec."Primary Classification")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Primary Classification';
+                }
                 field("Property Type"; Rec."Property Type")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Property Type';
+                }
+
+                field("Usage Type"; Rec."Usage Type")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Usage Type';
                 }
 
                 field("Bedrooms"; Rec."Bedrooms")
