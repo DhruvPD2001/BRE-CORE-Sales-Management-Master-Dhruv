@@ -39,6 +39,13 @@ pageextension 53116 "Contact Card" extends "Contact Card"
         {
             Visible = false;
         }
+        modify("Salesperson Code")
+        {
+            trigger OnAfterValidate()
+            begin
+                SalesStage();
+            end;
+        }
 
         addlast(General)
         {
@@ -280,6 +287,14 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ToolTip = 'Competitor Information';
                 }
             }
+            group("Lead Stage")
+            {
+                part("LeadStage"; "Lead Stage SubPage")
+                {
+                    SubPageLink = "No." = FIELD("No.");
+                    ApplicationArea = All;
+                }
+            }
 
         }
     }
@@ -331,6 +346,34 @@ pageextension 53116 "Contact Card" extends "Contact Card"
         end;
     end;
 
+    procedure SalesStage()
+    var
+        SalesStages: Record "Lead Stage";
+        SalesStageSubpage: Record "Lead Stage SubPage";
+        LineNo: Integer;
+    begin
+        // Step 0: Clear existing subpage lines for this record
+        SalesStageSubpage.SetRange("No.", Rec."No.");
+        if SalesStageSubpage.FindSet() then
+            SalesStageSubpage.DeleteAll();
+
+        LineNo := 1;
+
+        // Step 1: Loop through all Lead Stages
+        if SalesStages.FindSet() then
+            repeat
+                SalesStageSubpage.Init();
+                SalesStageSubpage."No." := Rec."No.";
+                SalesStageSubpage."ID" := LineNo;               // Link to current card/document
+                SalesStageSubpage."Stage ID" := SalesStages."Stage ID";
+                SalesStageSubpage."Stage Name" := SalesStages."Stage Name";
+                SalesStageSubpage."Description" := SalesStages."Description";
+                SalesStageSubpage."Lead Score" := SalesStages."Lead Score";
+                SalesStageSubpage.Insert();
+
+                LineNo += 1; // increment ID for next line
+            until SalesStages.Next() = 0;
+    end;
 
     procedure EditableDisqualifiedReason(): Boolean
     var
