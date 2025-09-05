@@ -2,6 +2,10 @@ pageextension 53119 "Contact List" extends "Contact List"
 {
     layout
     {
+        modify("No.")
+        {
+            Caption = 'Lead ID';
+        }
         addafter("E-Mail")
         {
             field("Lead Source"; Rec."Lead Source")
@@ -24,6 +28,11 @@ pageextension 53119 "Contact List" extends "Contact List"
                 ApplicationArea = All;
                 ToolTip = 'Lead Rating';
             }
+            field("Next Task Date"; Rec."Next Task Date")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Next Task Date';
+            }
             field("Property Type"; Rec."Property Type")
             {
                 ApplicationArea = All;
@@ -39,10 +48,10 @@ pageextension 53119 "Contact List" extends "Contact List"
                 ApplicationArea = All;
                 ToolTip = 'Budget Range (AED)';
             }
-            field("Lead Sales Stages"; Rec."Lead Sales Stages")
+            field("Date Created"; Rec."Date Created")
             {
                 ApplicationArea = All;
-                ToolTip = 'Lead Sales Stages';
+                ToolTip = 'Date Created';
             }
         }
     }

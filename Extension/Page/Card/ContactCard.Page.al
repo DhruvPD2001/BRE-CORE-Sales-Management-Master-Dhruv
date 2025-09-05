@@ -2,6 +2,8 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 {
     layout
     {
+        moveafter(General; Communication)
+
         modify("E-Mail")
         {
             trigger OnAfterValidate()
@@ -35,6 +37,10 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 end;
             end;
         }
+        modify("Next Task Date")
+        {
+            Caption = 'Next Follow-up Date';
+        }
         modify("Type")
         {
             Visible = false;
@@ -66,9 +72,9 @@ pageextension 53116 "Contact Card" extends "Contact Card"
             }
         }
 
-        addafter(General)
-        {
 
+        addafter(Communication)
+        {
 
             group("Lead Information")
             {
@@ -135,20 +141,12 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Lead Rating';
                 }
-                field("Lead Value";Rec."Lead Value")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Lead Value';
-                }
-                field("Threshold Value";Rec."Threshold Value")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Threshold Value';
-                }
+
                 field("Date Created"; Rec."Date Created")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Date Created';
+                    Editable = false;
                 }
                 field("Expected Follow-up Date"; Rec."Expected Follow-up Date")
                 {
@@ -237,6 +235,11 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Size (Sq. Ft.)';
                 }
+                field("Threshold Value"; Rec."Threshold Value")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Threshold Value';
+                }
                 field("Furnishing Status"; Rec."Furnishing Status")
                 {
                     ApplicationArea = All;
@@ -251,6 +254,11 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Move-in Timeline';
+                }
+                field("Competitor Information"; Rec."Competitor Information")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Competitor Information';
                 }
             }
 
@@ -285,20 +293,6 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Preferred Sale Type';
-                }
-            }
-            group("Interaction & Follow-up History")
-            {
-
-                field("Lead Sales Stages"; Rec."Lead Sales Stages")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Lead Sales Stages';
-                }
-                field("Competitor Information"; Rec."Competitor Information")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Competitor Information';
                 }
             }
             group("Lead Stage")
