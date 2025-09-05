@@ -135,6 +135,16 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Lead Rating';
                 }
+                field("Lead Value";Rec."Lead Value")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Lead Value';
+                }
+                field("Threshold Value";Rec."Threshold Value")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Threshold Value';
+                }
                 field("Date Created"; Rec."Date Created")
                 {
                     ApplicationArea = All;
@@ -145,6 +155,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                     ToolTip = 'Expected Follow-up Date';
                 }
+
                 field("Allow Reopen"; Rec."Allow Reopen")
                 {
                     ApplicationArea = All;
@@ -166,16 +177,19 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Previous Status';
+                    Editable = false;
                 }
                 field("Status Changed By"; Rec."Status Changed By")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Status Changed By';
+                    Editable = false;
                 }
                 field("Status Changed On"; Rec."Status Changed On")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Status Changed On';
+                    Editable = false;
                 }
             }
 
@@ -333,17 +347,6 @@ pageextension 53116 "Contact Card" extends "Contact Card"
     begin
         IsDisqualified := EditableDisqualifiedReason();
 
-        // Find the first To-do record for this contact with Date > Today
-        taskRec.SetRange("Contact No.", Rec."No.");
-        taskRec.SetFilter("Date", '>=%1', Today);
-        taskRec.SetCurrentKey(Date);
-        if taskRec.FindFirst() then begin
-            // Find the matching contact record
-            if contactRec.Get(taskRec."Contact No.") then begin
-                contactRec."Expected Follow-up Date" := taskRec.Date;
-                contactRec.Modify();
-            end;
-        end;
     end;
 
     procedure SalesStage()
