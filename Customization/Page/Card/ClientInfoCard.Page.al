@@ -128,6 +128,15 @@ page 53120 "Client Info Card"
                     ToolTip = 'Date when the Client Info was created.';
                 }
             }
+            group("Lead Information")
+            {
+                part("Lead Information List"; "Lead Information List")
+                {
+                    Caption = 'Lead Information List';
+                    SubPageLink = "Client Info Id" = FIELD("Client Info ID");
+                    ApplicationArea = All;
+                }
+            }
         }
     }
 
