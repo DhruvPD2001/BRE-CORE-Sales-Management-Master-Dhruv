@@ -10,6 +10,15 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 ApplicationArea = All;
             }
         }
+        addafter("Salesperson Code")
+        {
+            field("SalesPerson Name"; Rec."SalesPerson Name")
+            {
+                ToolTip = 'SalesPerson Name';
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
         moveafter(General; Communication)
 
         // modify("E-Mail")
@@ -247,6 +256,17 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Size (Sq. Ft.)';
+
+                    trigger onValidate()
+                    var
+                        Emailer: Codeunit "Customer Item Emailer";
+                        companyData: Record testData;
+                    begin
+                        if companyData.FindFirst() then begin
+                            if companyData."Automated Email" then
+                                Emailer.SendItemsEmail(Rec."No.");
+                        end;
+                    end;
                 }
                 field("Threshold Value"; Rec."Threshold Value")
                 {
@@ -317,29 +337,6 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 }
             }
 
-        }
-    }
-    actions
-    {
-        addafter("C&ontact")
-        {
-            action(SendItemButtonsEmail)
-            {
-                ApplicationArea = All;
-                Caption = 'Send Items Email';
-                Image = Email;
-
-                trigger OnAction()
-                var
-                    Emailer: Codeunit "Customer Item Emailer";
-                    ItemsCsv: Text;
-                begin
-                    // TODO: replace with a proper picker; for demo:
-                    ItemsCsv := '1896-S,1000'; // sample list
-                    Emailer.SendItemsEmail(Rec."No.", ItemsCsv);
-                    Message('Email sent to %1.', Rec."E-Mail");
-                end;
-            }
         }
     }
 

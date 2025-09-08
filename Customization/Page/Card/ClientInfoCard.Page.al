@@ -32,11 +32,39 @@ page 53120 "Client Info Card"
                 field(Email; Rec.Email)
                 {
                     ToolTip = 'Email address of the Client Info.';
+                    trigger OnValidate()
+                    var
+                        LeadRec: Record "Client Info";
+                    begin
+                        if Rec.Email <> '' then
+                            if not Rec.Email.Contains('@') then
+                                Error('Invalid email address format.');
+                        if Rec.Email <> '' then begin
+                            LeadRec.Reset();
+                            LeadRec.SetRange(Email, Rec.Email);
+                            if LeadRec.FindFirst() then
+                                if LeadRec."Client Info ID" <> Rec."Client Info ID" then
+                                    Error('Duplicate email found: %1 already assigned to Lead: %2.', Rec.Email, LeadRec."Client Name");
+                        end;
+                    end;
                 }
                 field("Phone No."; Rec."Phone No.")
                 {
                     ToolTip = 'Phone number of the Client Info.';
                     Caption = 'Phone No.';
+
+                    trigger OnValidate()
+                    var
+                        LeadRec: Record "Client Info";
+                    begin
+                        if Rec."Phone No." <> '' then begin
+                            LeadRec.Reset();
+                            LeadRec.SetRange("Phone No.", Rec."Phone No.");
+                            if LeadRec.FindFirst() then
+                                if LeadRec."Client Info ID" <> Rec."Client Info ID" then
+                                    Error('Duplicate phone number found: %1 already assigned to Lead: %2.', Rec."Phone No.", LeadRec."Client Name");
+                        end;
+                    end;
                 }
                 field("Mobile No."; Rec."Mobile No.")
                 {
