@@ -33,9 +33,15 @@ page 53120 "Client Info Card"
                 {
                     ToolTip = 'Email address of the Client Info.';
                 }
+                field("Phone No."; Rec."Phone No.")
+                {
+                    ToolTip = 'Phone number of the Client Info.';
+                    Caption = 'Phone No.';
+                }
                 field("Mobile No."; Rec."Mobile No.")
                 {
                     ToolTip = 'Mobile number of the Client Info.';
+                    Caption = 'Mobile Phone No,';
                 }
 
                 field("Company Name"; Rec."Company Name")
@@ -130,6 +136,6 @@ page 53120 "Client Info Card"
     begin
         Rec.TestField("Client Name");
         Rec.TestField(Email);
-        Rec.TestField("Mobile No.");
+        Rec.TestField("Phone No.");
     end;
 }
