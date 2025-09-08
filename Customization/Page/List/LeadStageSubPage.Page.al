@@ -64,61 +64,6 @@ page 52006 "Lead Stage SubPage"
     }
 
 
-    // procedure UpdateQualifyStageStatus()
-    // var
-    //     SubStage: Record "Lead Stage SubPage";
-    //     ScoreSetup: Record "Lead Score Range";
-    //     ContactRec: Record Contact;
-    //     leadstatus: Enum "Lead Status";
-    //     leadrating: Enum "Lead Rating";
-    // begin
-    //     // Guard: must have parent No.
-    //     if Rec."No." = '' then
-    //         exit;
-
-    //     // Work with the latest line that has Lead Status = Qualify OR Disqualify
-    //     SubStage.Reset();
-    //     SubStage.SetRange("No.", Rec."No.");
-    //     SubStage.SetFilter("Lead Status", '%1|%2', leadstatus::Qualified, leadstatus::Disqualified);
-
-    //     // Optional: make sure ordering uses ID so FindLast returns highest ID
-    //     SubStage.SetCurrentKey("ID");
-
-    //     if not SubStage.FindLast() then
-    //         exit; // no line found
-
-    //     // Check if disqualified
-    //     if SubStage."Lead Status" = leadstatus::Disqualified then begin
-    //         // Blank the Lead Rating
-    //         leadrating := leadrating::" "; // assuming "Lead Rating" is an enum
-    //         SubStage.Modify(true);
-
-    //         if ContactRec.Get(Rec."No.") then begin
-    //             ContactRec.Validate("Lead Rating", leadrating::" ");
-    //             ContactRec.Modify(true);
-    //         end;
-
-    //         exit; // stop further processing
-    //     end;
-
-    //     // Otherwise, if Qualified → evaluate Score
-    //     ScoreSetup.Reset();
-    //     ScoreSetup.SetFilter("Min Score Percent", '<=%1', Rec."Lead Score");
-    //     ScoreSetup.SetFilter("Max Score Percent", '>=%1', Rec."Lead Score");
-
-    //     if ScoreSetup.FindFirst() then begin
-    //         // Update SubStage High Level Lead Rating
-    //         leadrating := ScoreSetup."Lead Rating";
-    //         SubStage.Modify(true);
-
-    //         // Update related Contact record
-    //         if ContactRec.Get(Rec."No.") then begin
-    //             ContactRec.Validate("Lead Rating", leadrating);
-    //             ContactRec.Modify(true);
-    //         end;
-    //     end;
-    // end;
-
     procedure UpdateQualifyStageStatus()
     var
         SubStage: Record "Lead Stage SubPage";
@@ -131,64 +76,44 @@ page 52006 "Lead Stage SubPage"
         if Rec."No." = '' then
             exit;
 
-        // Work with the latest line that has any lead status we care about
+        // Get current record that was just modified
         SubStage.Reset();
         SubStage.SetRange("No.", Rec."No.");
-        SubStage.SetFilter("Lead Status", '%1|%2|%3|%4',
-            leadstatus::Qualified,
-            leadstatus::Disqualified,
-            leadstatus::New,
-            leadstatus::Contacted);
+        SubStage.SetRange("ID", Rec."ID"); // Focus on current line being modified
 
-        // Optional: make sure ordering uses ID so FindLast returns highest ID
-        SubStage.SetCurrentKey("ID");
-
-        if not SubStage.FindLast() then
-            exit; // no line found
-
-        // --- Case 1: New or Contacted → Always Blank ---
-        if (SubStage."Lead Status" = leadstatus::New) or
-           (SubStage."Lead Status" = leadstatus::Contacted) then begin
-            leadrating := ScoreSetup."Lead Rating"::" ";
-            SubStage.Modify(true);
-
-            if ContactRec.Get(Rec."No.") then begin
-                ContactRec.Validate("Lead Rating", leadrating);
-                ContactRec.Modify(true);
-            end;
+        if not SubStage.FindFirst() then
             exit;
-        end;
 
-        // --- Case 2: Disqualified → Always Blank ---
-        if SubStage."Lead Status" = leadstatus::Disqualified then begin
-            leadrating := ScoreSetup."Lead Rating"::" ";
-            SubStage.Modify(true);
+        // Clear any existing lead rating first
+        Clear(leadrating);
+        if ContactRec.Get(Rec."No.") then begin
 
-            if ContactRec.Get(Rec."No.") then begin
-                ContactRec.Validate("Lead Rating", leadrating);
-                ContactRec.Modify(true);
+            // Process based on Lead Status
+            case Rec."Lead Status" of
+                leadstatus::Qualified:
+                    begin
+                        // For Qualified status, determine rating based on Lead Score (Hot/Warm/Cold)
+                        ScoreSetup.Reset();
+                        ScoreSetup.SetFilter("Min Score Percent", '<=%1', Rec."Lead Score");
+                        ScoreSetup.SetFilter("Max Score Percent", '>=%1', Rec."Lead Score");
+
+                        if ScoreSetup.FindFirst() then
+                            leadrating := ScoreSetup."Lead Rating"
+                        else
+                            leadrating := leadrating::" "; // Default to blank if no range found
+                    end;
+
+                leadstatus::Disqualified:
+                    leadrating := leadrating::" ";
+                else
+                    //     // For any other status, set to blank
+                    leadrating := ContactRec."Lead Rating";
             end;
-            exit;
-        end;
 
-        // --- Case 3: Qualified → Evaluate Score ---
-        if SubStage."Lead Status" = leadstatus::Qualified then begin
-
-            ScoreSetup.Reset();
-            ScoreSetup.SetFilter("Min Score Percent", '<=%1', Rec."Lead Score");
-            ScoreSetup.SetFilter("Max Score Percent", '>=%1', Rec."Lead Score");
-
-            if ScoreSetup.FindFirst() then begin
-                leadrating := ScoreSetup."Lead Rating";
-                SubStage.Modify(true);
-
-                if ContactRec.Get(Rec."No.") then begin
-                    ContactRec.Validate("Lead Rating", leadrating);
-                    ContactRec.Modify(true);
-                end;
-            end;
+            // Update the Contact record with new Lead Rating
+            ContactRec.Validate("Lead Rating", leadrating);
+            ContactRec.Modify(true);
         end;
     end;
-
 
 }
