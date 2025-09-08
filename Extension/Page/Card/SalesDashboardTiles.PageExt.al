@@ -12,7 +12,6 @@ pageextension 51253 "Sales Dashboard Tiles" extends "Sales & Relationship Mgr. A
                     ApplicationArea = Basic, Suite;
                     Caption = 'All Task''s';
                     ToolTip = 'Count of all tasks.';
-                    StyleExpr = 'Favorable';
 
                     trigger OnDrillDown()
                     begin
@@ -24,7 +23,6 @@ pageextension 51253 "Sales Dashboard Tiles" extends "Sales & Relationship Mgr. A
                     ApplicationArea = Basic, Suite;
                     Caption = 'All Pending Task''s';
                     ToolTip = 'Count of all pending tasks.';
-                    StyleExpr = 'AttentionAccent';
 
                     trigger OnDrillDown()
                     begin
@@ -36,7 +34,6 @@ pageextension 51253 "Sales Dashboard Tiles" extends "Sales & Relationship Mgr. A
                     ApplicationArea = Basic, Suite;
                     Caption = 'All Completed Task''s';
                     ToolTip = 'Count of all completed tasks.';
-                    StyleExpr = 'StrongAccent';
 
                     trigger OnDrillDown()
                     begin
@@ -52,7 +49,6 @@ pageextension 51253 "Sales Dashboard Tiles" extends "Sales & Relationship Mgr. A
                     ApplicationArea = Basic, Suite;
                     Caption = 'Todays Task''s';
                     ToolTip = 'Count of Todays tasks.';
-                    StyleExpr = 'StandardAccent';
                     trigger OnDrillDown()
                     begin
                         this.ShowTodaysTasks();
@@ -63,7 +59,6 @@ pageextension 51253 "Sales Dashboard Tiles" extends "Sales & Relationship Mgr. A
                     ApplicationArea = Basic, Suite;
                     Caption = 'Today''s Pending Task''s';
                     ToolTip = 'Count of Todays pending tasks.';
-                    StyleExpr = 'Unfavorable';
 
                     trigger OnDrillDown()
                     begin
@@ -75,7 +70,6 @@ pageextension 51253 "Sales Dashboard Tiles" extends "Sales & Relationship Mgr. A
                     ApplicationArea = Basic, Suite;
                     Caption = 'Today''s Completed Task''s';
                     ToolTip = 'Count of Todays completed tasks.';
-                    StyleExpr = 'Favorable'; // Green color for completed tasks
 
                     trigger OnDrillDown()
                     begin
