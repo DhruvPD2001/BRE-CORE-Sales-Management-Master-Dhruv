@@ -130,7 +130,7 @@ page 53120 "Client Info Card"
             }
             group("Lead Information")
             {
-                part("Lead Information List"; "Lead Information List")
+                part("Lead Information List"; "Lead Information SubPage")
                 {
                     Caption = 'Lead Information List';
                     SubPageLink = "Client Info Id" = FIELD("Client Info ID");
