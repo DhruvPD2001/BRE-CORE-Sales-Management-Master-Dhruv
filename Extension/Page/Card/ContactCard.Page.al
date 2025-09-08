@@ -262,9 +262,11 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                         Emailer: Codeunit "Customer Item Emailer";
                         companyData: Record testData;
                     begin
-                        if companyData.FindFirst() then begin
-                            if companyData."Automated Email" then
-                                Emailer.SendItemsEmail(Rec."No.");
+                        if Rec."Size (Sq. Ft.)" > 0 then begin
+                            if companyData.FindFirst() then begin
+                                if companyData."Automated Email" then
+                                    Emailer.SendItemsEmail(Rec."No.");
+                            end;
                         end;
                     end;
                 }
