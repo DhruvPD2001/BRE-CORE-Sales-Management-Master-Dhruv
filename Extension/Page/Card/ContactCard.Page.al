@@ -146,7 +146,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                         if Rec."Lead Status" = Rec."Lead Status"::Disqualified then
                             Rec."Disqualification Date" := Today()
                         else
-                        Rec."Disqualification Date" := 0D;
+                            Rec."Disqualification Date" := 0D;
                     end;
                 }
                 field("Lead Rating"; Rec."Lead Rating")
@@ -342,6 +342,12 @@ pageextension 53116 "Contact Card" extends "Contact Card"
             }
         }
     }
+
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        Rec.testField("Client Info ID");
+    end;
+
     trigger OnModifyRecord(): Boolean
     begin
         IsDisqualified := EditableDisqualifiedReason();
