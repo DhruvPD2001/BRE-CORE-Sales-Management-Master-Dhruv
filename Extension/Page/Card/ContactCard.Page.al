@@ -143,6 +143,10 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                             Rec."Status Changed By" := UserId();
                             Rec."Status Changed On" := CurrentDateTime;
                         end;
+                        if Rec."Lead Status" = Rec."Lead Status"::Disqualified then
+                            Rec."Disqualification Date" := Today()
+                        else
+                        Rec."Disqualification Date" := 0D;
                     end;
                 }
                 field("Lead Rating"; Rec."Lead Rating")
