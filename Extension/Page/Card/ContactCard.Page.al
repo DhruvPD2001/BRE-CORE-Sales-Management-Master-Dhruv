@@ -77,6 +77,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Owner Type for this contact.';
+                Caption = 'Lead Owner Type';
             }
         }
 
