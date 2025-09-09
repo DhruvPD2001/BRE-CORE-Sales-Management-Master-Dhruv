@@ -31,13 +31,13 @@ page 52003 "Lead Stage"
                 field("Lead Score"; Rec."Lead Score")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Numeric value (0–100) representing the score of leads in this stage.';
+                    ToolTip = 'Numeric value (0-100) representing the score of leads in this stage.';
                 }
-                field("Lead Status"; Rec."Lead Status")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'The status of the lead at this stage (New, Active, Closed-Won, or Closed-Lost).';
-                }
+                // field("Lead Status"; Rec."Lead Status")
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'The status of the lead at this stage (New, Active, Closed-Won, or Closed-Lost).';
+                // }
             }
         }
     }
