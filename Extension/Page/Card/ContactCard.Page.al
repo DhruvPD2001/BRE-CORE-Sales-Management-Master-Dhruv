@@ -116,11 +116,13 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Others';
+                    Editable = (Rec."Lead Source" = Rec."Lead Source"::Other);
                 }
                 field("Campaign Name"; Rec."Campaign Name")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Campaign Name';
+                    Editable = (Rec."Lead Source" = Rec."Lead Source"::"Campaign/Events");
                 }
                 // field("Lead Owner"; Rec."Lead Owner")
                 // {
@@ -162,6 +164,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Lead Rating';
+                    Editable = false;
                 }
 
                 field("Date Created"; Rec."Date Created")
