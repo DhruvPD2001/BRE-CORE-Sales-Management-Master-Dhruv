@@ -19,6 +19,10 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 Editable = false;
             }
         }
+        modify("Company No.")
+        {
+            Visible = false;
+        }
         moveafter(General; Communication)
 
         // modify("E-Mail")
@@ -100,6 +104,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Lead Name';
+                    Visible = false;
                 }
 
                 field("Position/Role"; Rec."Position/Role")
