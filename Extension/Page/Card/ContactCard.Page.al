@@ -236,6 +236,13 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Primary Classification';
+                    trigger OnValidate()
+                    begin
+                        if Rec."Primary Classification" = 'Commercial' then
+                            Rec.Bedrooms := 0;
+                        Rec."Property Type" := '';
+                        Rec."Usage Type" := '';
+                    end;
                 }
                 field("Property Type"; Rec."Property Type")
                 {
@@ -253,6 +260,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Bedrooms';
+                    Editable = IsBedroomsEditable;
                 }
                 field("Bathrooms"; Rec."Bathrooms")
                 {
@@ -276,15 +284,16 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 
                     trigger onValidate()
                     var
-                        Emailer: Codeunit "Customer Item Emailer";
                         companyData: Record testData;
+                        Emailer: Codeunit "Customer Item Emailer";
+
                     begin
-                        if Rec."Size (Sq. Ft.)" > 0 then begin
-                            if companyData.FindFirst() then begin
+                        if Rec."Size (Sq. Ft.)" > 0 then
+                            if companyData.FindFirst() then
                                 if companyData."Automated Email" then
                                     Emailer.SendItemsEmail(Rec."No.");
-                            end;
-                        end;
+
+
                     end;
                 }
                 field("Threshold Value"; Rec."Threshold Value")
@@ -359,6 +368,9 @@ pageextension 53116 "Contact Card" extends "Contact Card"
         }
     }
 
+    var
+        IsBedroomsEditable: Boolean;
+
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     begin
         Rec.testField("Client Info ID");
@@ -367,6 +379,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
     trigger OnModifyRecord(): Boolean
     begin
         IsDisqualified := EditableDisqualifiedReason();
+        SetBedroomsEditable();
     end;
 
     trigger OnAfterGetRecord()
@@ -376,6 +389,8 @@ pageextension 53116 "Contact Card" extends "Contact Card"
     begin
         IsDisqualified := EditableDisqualifiedReason();
         Rec."Next Action" := GetNextAction();
+        SetBedroomsEditable();
+
     end;
 
     procedure SalesStage()
@@ -438,4 +453,13 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 
     var
         IsDisqualified: Boolean;
+
+    local procedure SetBedroomsEditable()
+    begin
+        if Rec."Primary Classification" = 'Residential' then
+            IsBedroomsEditable := true
+        else
+            IsBedroomsEditable := false;
+        // Reset value when Commercial        
+    end;
 }
