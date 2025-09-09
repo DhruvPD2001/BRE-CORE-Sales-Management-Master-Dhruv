@@ -10,6 +10,15 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                 ApplicationArea = All;
             }
         }
+        addafter("Next Task Date")
+        {
+            field("Next Action"; Rec."Next Action")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Next Action';
+                Editable = false;
+            }
+        }
         addafter("Salesperson Code")
         {
             field("SalesPerson Name"; Rec."SalesPerson Name")
@@ -366,7 +375,7 @@ pageextension 53116 "Contact Card" extends "Contact Card"
         contactRec: Record Contact;
     begin
         IsDisqualified := EditableDisqualifiedReason();
-
+        Rec."Next Action" := GetNextAction();
     end;
 
     procedure SalesStage()
@@ -396,6 +405,29 @@ pageextension 53116 "Contact Card" extends "Contact Card"
 
                 LineNo += 1; // increment ID for next line
             until SalesStages.Next() = 0;
+    end;
+
+    local procedure GetNextAction(): Text
+    var
+        TaskRec: Record "To-do";
+        Descriptions: Text;
+        IsFirst: Boolean;
+    begin
+        Descriptions := '';
+        IsFirst := true;
+        if Rec."Next Task Date" <> 0D then begin
+            TaskRec.SetRange("Contact No.", Rec."No.");
+            TaskRec.SetRange("Date", Rec."Next Task Date");
+            TaskRec.SetFilter(Status, '<>%1', TaskRec.Status::Completed);
+            if TaskRec.FindSet() then
+                repeat
+                    if not IsFirst then
+                        Descriptions += ', ';
+                    Descriptions += TaskRec.Description;
+                    IsFirst := false;
+                until TaskRec.Next() = 0;
+        end;
+        exit(Descriptions);
     end;
 
     procedure EditableDisqualifiedReason(): Boolean

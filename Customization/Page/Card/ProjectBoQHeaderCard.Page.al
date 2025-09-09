@@ -37,7 +37,7 @@ page 53113 "Project BoQ Header Card"
                 part(BoQLines; "Project BoQ Line List")
                 {
                     ApplicationArea = All;
-                    SubPageLink = "Project ID" = FIELD("Project Id");
+                    SubPageLink = "BOQ ID" = field("BoQID");
                 }
             }
         }
