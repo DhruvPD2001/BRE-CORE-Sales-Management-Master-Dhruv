@@ -35,16 +35,25 @@ page 53120 "Client Info Card"
                     trigger OnValidate()
                     var
                         LeadRec: Record "Client Info";
+                        UserResponse: Boolean;
                     begin
                         if Rec.Email <> '' then
                             if not Rec.Email.Contains('@') then
                                 Error('Invalid email address format.');
+
                         if Rec.Email <> '' then begin
                             LeadRec.Reset();
                             LeadRec.SetRange(Email, Rec.Email);
                             if LeadRec.FindFirst() then
-                                if LeadRec."Client Info ID" <> Rec."Client Info ID" then
-                                    Error('Duplicate email found: %1 already assigned to Lead: %2.', Rec.Email, LeadRec."Client Name");
+                                if LeadRec."Client Info ID" <> Rec."Client Info ID" then begin
+                                    UserResponse := Dialog.Confirm(
+                                        StrSubstNo('Duplicate email found: %1 is already assigned to Client: %2. Do you want to open the existing record?', Rec.Email, LeadRec."Client Name"),
+                                        false
+                                    );
+                                    if UserResponse then
+                                        PAGE.Run(PAGE::"Client Info Card", LeadRec);
+                                    Error('Duplicate email found: %1 already assigned to Client: %2.', Rec.Email, LeadRec."Client Name");
+                                end;
                         end;
                     end;
                 }
@@ -56,13 +65,20 @@ page 53120 "Client Info Card"
                     trigger OnValidate()
                     var
                         LeadRec: Record "Client Info";
+                        UserResponse: Boolean;
                     begin
                         if Rec."Phone No." <> '' then begin
                             LeadRec.Reset();
                             LeadRec.SetRange("Phone No.", Rec."Phone No.");
                             if LeadRec.FindFirst() then
                                 if LeadRec."Client Info ID" <> Rec."Client Info ID" then
-                                    Error('Duplicate phone number found: %1 already assigned to Lead: %2.', Rec."Phone No.", LeadRec."Client Name");
+                                     UserResponse := Dialog.Confirm(
+                                        StrSubstNo('Duplicate Phone No found: %1 is already assigned to Client: %2. Do you want to open the existing record?', Rec."Phone No.", LeadRec."Client Name"),
+                                        false
+                                    );
+                                    if UserResponse then
+                                        PAGE.Run(PAGE::"Client Info Card", LeadRec);
+                                    Error('Duplicate Phone No. found: %1 already assigned to Client: %2.', Rec."Phone No.", LeadRec."Client Name");
                         end;
                     end;
                 }
