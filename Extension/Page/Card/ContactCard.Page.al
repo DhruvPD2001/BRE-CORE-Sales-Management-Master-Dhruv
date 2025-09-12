@@ -364,6 +364,17 @@ pageextension 53116 "Contact Card" extends "Contact Card"
                     ApplicationArea = All;
                 }
             }
+            group(totalLeadScore)
+            {
+                ShowCaption = false;
+                field("Total Score"; Rec."Total Score")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    Caption = 'Total Score';
+                    ToolTip = 'Total Scores';
+                }
+            }
 
         }
     }
