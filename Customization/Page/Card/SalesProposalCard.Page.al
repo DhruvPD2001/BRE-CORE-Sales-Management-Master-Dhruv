@@ -104,17 +104,49 @@ page 51505 "Sales Proposal Card"
                     ApplicationArea = All;
                     ToolTip = 'Approval status of the sales proposal.';
                 }
+                field("Reason for Rejection"; Rec."Reason for Rejection")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Reason for rejection if the sales proposal was not approved.';
+                }
+                field("Internal Remark"; Rec."Internal Remark")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Internal remarks regarding the sales proposal.';
+                }
             }
         }
     }
 
     actions
     {
+
         area(Processing)
         {
 
+            action("Submission for Approval")
+            {
+                ApplicationArea = All;
+                Caption = 'Submit for Approval';
+                Image = Approve;
+                ToolTip = 'Submit the vendor proposal for approval to the project manager.';
+                trigger OnAction()
+                var
+                    ApprovalSalesProposalCodeunit: Codeunit "ApprovalSalesProposal";
+                begin
+
+                    ApprovalSalesProposalCodeunit.SubmitVendorProposal(Rec);
+                    Dialog.Message('✅ Your request has been submitted successfully.');
+
+                end;
+            }
+
         }
+        area(Promoted)
+        {
+            actionref(submitforapprovaltoprojectmanager; "Submission for Approval")
+            { }
+        }
+
     }
-
-
 }
