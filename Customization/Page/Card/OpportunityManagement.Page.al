@@ -81,31 +81,31 @@ page 51264 "Opportunity Management"
             }
         }
     }
-    actions
-    {
-        area(Navigation)
-        {
-            action(ViewRelatedLead)
-            {
-                ApplicationArea = All;
-                Caption = 'View Related Lead';
-                Image = ContactPerson;
-                ToolTip = 'View the lead that was converted to this opportunity.';
+    // actions
+    // {
+    //     area(Navigation)
+    //     {
+    //         action(ViewRelatedLead)
+    //         {
+    //             ApplicationArea = All;
+    //             Caption = 'View Related Lead';
+    //             Image = ContactPerson;
+    //             ToolTip = 'View the lead that was converted to this opportunity.';
 
-                trigger OnAction()
-                var
-                    LeadRecord: Record "Lead Management";
-                    LeadCard: Page "Lead Card";
-                begin
-                    if Rec."Lead ID" <> '' then begin
-                        if LeadRecord.Get(Rec."Lead ID") then begin
-                            LeadCard.SetRecord(LeadRecord);
-                            LeadCard.Run();
-                        end;
-                    end else
-                        Message('No related lead found for this opportunity.');
-                end;
-            }
-        }
-    }
+    //             trigger OnAction()
+    //             var
+    //                 LeadRecord: Record "Lead Management";
+    //                 LeadCard: Page "Lead Card";
+    //             begin
+    //                 if Rec."Lead ID" <> '' then begin
+    //                     if LeadRecord.Get(Rec."Lead ID") then begin
+    //                         LeadCard.SetRecord(LeadRecord);
+    //                         LeadCard.Run();
+    //                     end;
+    //                 end else
+    //                     Message('No related lead found for this opportunity.');
+    //             end;
+    //         }
+    //     }
+    // }
 }
